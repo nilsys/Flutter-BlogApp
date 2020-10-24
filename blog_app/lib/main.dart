@@ -7,7 +7,7 @@ void main() {
   runApp(MaterialApp(
     initialRoute: '/signup',
     routes: {
-      '/': (context) => Login(),
+      '/login': (context) => Login(),
       '/signup': (context) => SignUp(),
     },
   ));
