@@ -7,17 +7,19 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
-  String _username,_email,_password,_confirmpassword="";
+
+  String _username, _email, _password = "";
+
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Form(
         key: _formKey,
-        //resizeToAvoidBottomPadding: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
