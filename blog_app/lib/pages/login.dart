@@ -1,3 +1,6 @@
+import 'package:blog_app/api/auth_api.dart';
+import 'package:blog_app/pages/home.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -7,8 +10,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   String _email, _password = "";
+
+  @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -74,13 +85,15 @@ class _LoginState extends State<Login> {
                           color: Colors.grey,
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue)
-                        )
-                      ),
-                    validator: (email)=>EmailValidator.validate(email)? null:"Invalid email address",
-                    onSaved: (email)=> _email = email,
+                            borderSide: BorderSide(color: Colors.lightBlue))),
+                    validator: (email) => EmailValidator.validate(email)
+                        ? null
+                        : "Invalid email address",
+                    onSaved: (email) => _email = email,
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText: 'PASSWORD',
@@ -90,12 +103,12 @@ class _LoginState extends State<Login> {
                           color: Colors.grey,
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue)
-                        )
-                    ),
+                            borderSide: BorderSide(color: Colors.lightBlue))),
                     obscureText: true,
                   ),
-                  SizedBox(height: 5.0,),
+                  SizedBox(
+                    height: 5.0,
+                  ),
                   Container(
                     alignment: Alignment(1.0, 0.0),
                     padding: EdgeInsets.only(top: 15.0, left: 20.0),
@@ -106,47 +119,86 @@ class _LoginState extends State<Login> {
                             color: Colors.lightBlue,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat',
-                            decoration: TextDecoration.underline
-                        ),
+                            decoration: TextDecoration.underline),
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.0,),
-                  Container(
+                  SizedBox(
                     height: 40.0,
-                    child: Material(
-                      borderRadius: BorderRadius.circular(20.0),
-                      shadowColor: Colors.lightBlueAccent,
-                      color: Colors.lightBlue,
-                      elevation: 7.0,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Center(
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat'),
+                  ),
+                  Container(
+                    height: 56,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(20.0),
+                              shadowColor: Colors.lightBlueAccent,
+                              color: Colors.lightBlue,
+                              elevation: 7.0,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Center(
+                                  child: Text(
+                                    'LOGIN',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(20.0),
+                              shadowColor: Colors.lightBlueAccent,
+                              color: Colors.lightBlue,
+                              elevation: 7.0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _sigInGoogle();
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'Google Login',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 15.0,),
+            SizedBox(
+              height: 15.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
                   'New User ?',
-                  style: TextStyle(
-                      fontFamily: 'Montserrat'
-                  ),
+                  style: TextStyle(fontFamily: 'Montserrat'),
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, '/signup');
@@ -157,8 +209,7 @@ class _LoginState extends State<Login> {
                         color: Colors.lightBlue,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline
-                    ),
+                        decoration: TextDecoration.underline),
                   ),
                 )
               ],
@@ -167,5 +218,24 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  /**
+   * all the Function 
+   */
+
+  void _sigInGoogle() async {
+    var result = await signInWithGoogle();
+    if (result) {
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      var snackBar = new SnackBar(
+          content: new Text("An Error Occured!!, Try again Later!!!"),
+          backgroundColor: Colors.red);
+
+      // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+      Scaffold.of(_formKey.currentContext).showSnackBar(snackBar);
+    }
   }
 }
