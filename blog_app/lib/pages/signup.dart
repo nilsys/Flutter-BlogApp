@@ -74,7 +74,7 @@ class _SignUp extends State<SignUp> {
                   SizedBox(height: 20.0,),
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'USERNAME',
+                        labelText: 'NAME',
                         labelStyle: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,

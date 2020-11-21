@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: posts.length,
                   itemBuilder: (context, index){
                     return Container(
-                      padding: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.only(bottom: 20),
                       child: Center(
                         child: Container(
                           //height: 200,
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Container(
                                       alignment: Alignment.topRight,
-                                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 0.0),
                                       child: Text(
                                         posts[index].date,
                                         style: TextStyle(
