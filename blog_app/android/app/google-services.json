@@ -8,6 +8,37 @@
   "client": [
     {
       "client_info": {
+
+        "mobilesdk_app_id": "1:164530807051:android:6c93f1ba73b053da81420e",
+        "android_client_info": {
+          "package_name": "com.example.blog_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164530807051-lbvhbhai943ln7f1vnditck1lpebmkil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdHrrYas48WshENHilc90e_zz4FWepfUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164530807051-lbvhbhai943ln7f1vnditck1lpebmkil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+
         "mobilesdk_app_id": "1:164530807051:android:980795df3d0b718381420e",
         "android_client_info": {
           "package_name": "com.vivid.blog_app"
