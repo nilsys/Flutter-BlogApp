@@ -8,6 +8,7 @@
   "client": [
     {
       "client_info": {
+
         "mobilesdk_app_id": "1:164530807051:android:6c93f1ba73b053da81420e",
         "android_client_info": {
           "package_name": "com.example.blog_app"
@@ -37,6 +38,7 @@
     },
     {
       "client_info": {
+
         "mobilesdk_app_id": "1:164530807051:android:980795df3d0b718381420e",
         "android_client_info": {
           "package_name": "com.vivid.blog_app"
