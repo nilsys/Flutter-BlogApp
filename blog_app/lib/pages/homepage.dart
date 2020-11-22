@@ -46,7 +46,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]) ; 
     return Scaffold(
       // appBar: AppBar(),
       backgroundColor: Colors.grey[200],
