@@ -49,16 +49,22 @@ updatedLogedUserDetails() async {
   }
 }
 
-void initializeAuthNotifier(AuthNotifier authNotifier) async {
+Future<void> initializeAuthNotifier(AuthNotifier authNotifier) async {
   User user = FirebaseAuth.instance.currentUser;
+  print("***********************************");
+  print("$user");
   try {
     var doc =
         FirebaseFirestore.instance.collection(Constants.users).doc(user.uid);
     DocumentSnapshot snap = await doc.get();
-    BlogUser bUser = BlogUser.fromSnapShot(snap) ; 
-    authNotifier.setUser(user); 
-    authNotifier.blogUserDetails(bUser) ; 
+    BlogUser bUser = BlogUser.fromMap(snap.data());
+  print("***********************************");
+
+    print("Blog User $bUser");
+    authNotifier.setUser(user);
+    authNotifier.blogUserDetails(bUser);
   } catch (err) {
+    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ : $err") ;
     return null;
   }
 }

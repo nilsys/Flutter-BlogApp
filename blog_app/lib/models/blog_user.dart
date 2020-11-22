@@ -6,12 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 class BlogUser {
   String uid;
   String email, picUrl, userName, name;
-  BlogUser.fromSnapShot(DocumentSnapshot snap) {
-    this.uid = snap.get(Constants.uid);
-    this.email = snap.get(Constants.email);
-    this.picUrl = snap.get(Constants.img);
-    this.name = snap.get(Constants.name);
-    this.userName = snap.get(Constants.userName);
+  String bio;
+  BlogUser.fromMap(Map<String, dynamic> snap) {
+    this.uid = snap[Constants.uid];
+    this.email = snap[Constants.email];
+    this.picUrl = snap[Constants.img];
+    this.name = snap[Constants.name];
+    this.userName = snap[Constants.userName];
+    this.bio = snap[Constants.bio];
   }
   BlogUser({this.uid, this.email});
 
@@ -25,7 +27,8 @@ class BlogUser {
       Constants.email: email,
       Constants.img: picUrl,
       Constants.name: name,
-      Constants.userName: userName
+      Constants.userName: userName,
+      Constants.bio: bio
     };
   }
 }

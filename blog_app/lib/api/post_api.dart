@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blog_app/models/blog_user.dart';
 import 'package:blog_app/models/postdetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog_app/util/constants.dart' as constants;
@@ -79,10 +80,14 @@ Future<String> uploadImage(File imageFile, String id) async {
     var t = await firebase_storage.FirebaseStorage.instance
         .ref("posts/$id")
         .putFile(imageFile);
-    return "hello"; 
+    return "hello";
     // return await t.ref.getDownloadURL();
   } catch (e) {
     print("Image Upload Error : $e");
     return null;
   }
 }
+
+// Future<void> uploadProfile(BlogUser user) {
+//   FirebaseFirestore.instance.collection(constants.users).doc(userId); 
+// }

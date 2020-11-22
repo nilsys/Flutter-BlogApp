@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:blog_app/models/blog_user.dart';
+import 'package:blog_app/notifier/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:email_validator/email_validator.dart';
-
+import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -10,20 +12,24 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-
   File imageFile;
+  BlogUser user;
+  AuthNotifier authnotifier;
   String _username, _email, _password, _name, _bio = "";
 
   _openGallery(BuildContext context) async {
-    PickedFile pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    PickedFile pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
     var picture = File(pickedFile.path);
     this.setState(() {
       imageFile = picture;
     });
     Navigator.of(context).pop();
   }
+
   _openCamera(BuildContext context) async {
-    PickedFile pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    PickedFile pickedFile =
+        await ImagePicker().getImage(source: ImageSource.camera);
     var picture = File(pickedFile.path);
     this.setState(() {
       imageFile = picture;
@@ -32,47 +38,43 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _showChoiceDialog(BuildContext context) {
-    return showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text(
-          'Make a Choice!',
-        ),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              GestureDetector(
-                child: Text(
-                    'Gallery'
-                ),
-                onTap: () {
-                  _openGallery(context);
-                },
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Make a Choice!',
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text('Gallery'),
+                    onTap: () {
+                      _openGallery(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text('Remove'),
+                    onTap: () {},
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-              ),
-              GestureDetector(
-                child: Text(
-                    'Camera'
-                ),
-                onTap: () {
-                  _openCamera(context);
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-              ),
-              GestureDetector(
-                child: Text(
-                    'Remove'
-                ),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+            ),
+          );
+        });
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -81,6 +83,9 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    authnotifier = Provider.of<AuthNotifier>(context);
+    user = authnotifier.blogUser;
+    print("user : ${user.toMap()}"); 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Form(
@@ -110,8 +115,7 @@ class _EditProfileState extends State<EditProfile> {
                           fontSize: 40.0,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
-                          color: Colors.lightBlue
-                      ),
+                          color: Colors.lightBlue),
                     ),
                   ),
                 ],
@@ -122,7 +126,7 @@ class _EditProfileState extends State<EditProfile> {
               child: Column(
                 children: <Widget>[
                   Stack(
-                    children: <Widget> [
+                    children: <Widget>[
                       GestureDetector(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 0.0),
@@ -133,9 +137,10 @@ class _EditProfileState extends State<EditProfile> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: AssetImage(
-                                    'assets/batman.jpg'
-                                ),
+                                image: NetworkImage(user == null ||
+                                        user.picUrl == null
+                                    ? "https://spoilerguy.com/wp-content/uploads/2020/10/Solo-Leveling-chapter-125-read.jpg"
+                                    : user.picUrl),
                               ),
                             ),
                           ),
@@ -163,17 +168,17 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'FULL NAME',
+                        labelText: 'NAME',
                         labelStyle: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue)
-                        )
-                    ),
-                    validator: (name){
+                            borderSide: BorderSide(color: Colors.lightBlue))),
+                    autofocus: true,
+                    initialValue: user == null ? "NULL" : user.name,
+                    validator: (name) {
                       Pattern pattern =
                           r"^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)";
                       RegExp regex = new RegExp(pattern);
@@ -182,9 +187,11 @@ class _EditProfileState extends State<EditProfile> {
                       else
                         return null;
                     },
-                    onSaved: (name)=> _name = name,
+                    onSaved: (name) => _name = name,
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText: 'USERNAME',
@@ -193,22 +200,23 @@ class _EditProfileState extends State<EditProfile> {
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
                         ),
+
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue)
-                        )
-                    ),
-                    validator: (name){
-                      Pattern pattern =
-                          r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                            borderSide: BorderSide(color: Colors.lightBlue))),
+                    initialValue: user == null || user.userName == null ? "" : user.userName,
+                    validator: (name) {
+                      Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
                       RegExp regex = new RegExp(pattern);
                       if (!regex.hasMatch(name))
                         return 'Invalid username';
                       else
                         return null;
                     },
-                    onSaved: (name)=> _username = name,
+                    onSaved: (name) => _username = name,
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText: 'BIO',
@@ -218,20 +226,18 @@ class _EditProfileState extends State<EditProfile> {
                           color: Colors.grey,
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue)
-                        )
-                    ),
-                    validator: (name){
+                            borderSide: BorderSide(color: Colors.lightBlue))),
+                    validator: (name) {
                       return null;
                     },
-                    onSaved: (bio)=> _bio = bio,
+                    onSaved: (bio) => _bio = bio,
                   ),
                   SizedBox(
                     height: 40.0,
                   ),
                   InkWell(
                     onTap: () {
-                      if(_formKey.currentState.validate()){
+                      if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
                         Navigator.pop(context);
                       }
@@ -265,5 +271,12 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
     );
+  }
+
+  void updateUserProfile() async {
+    user.name = _name;
+    user.userName = _username;
+    user.picUrl = imageFile.path;
+    // updateProfile(user);
   }
 }

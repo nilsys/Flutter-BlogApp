@@ -9,13 +9,39 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   final ScrollController _scrollController = ScrollController();
 
   List<Post> posts = [
-    Post(id: '1', name: 'Anaikin Skywalker', username: 'thechosenone',  date: 'April 22, 2019', title: 'Star Wars', content: 'May the force be with you', image: 'assets/anaikin.jpg', likes: 32, liked: true),
-    Post(id: '2', name: 'Bruce Wayne', username: 'therichguy',  date: 'January 12, 2020', title: 'The Dark Knight', content: 'I am Batman', image: 'assets/batman.jpg', likes: 20, liked: false),
-    Post(id: '3', name: 'Vito Corleone', username: 'doncorleone',  date: 'December 26, 1974', title: 'The Godfather', content: 'I am gonna make you an offer you cant refuse', image: 'assets/vito.jpg', likes: 128, liked: false)
+    Post(
+        id: '1',
+        name: 'Anaikin Skywalker',
+        username: 'thechosenone',
+        date: 'April 22, 2019',
+        title: 'Star Wars',
+        content: 'May the force be with you',
+        image: 'assets/anaikin.jpg',
+        likes: 32,
+        liked: true),
+    Post(
+        id: '2',
+        name: 'Bruce Wayne',
+        username: 'therichguy',
+        date: 'January 12, 2020',
+        title: 'The Dark Knight',
+        content: 'I am Batman',
+        image: 'assets/batman.jpg',
+        likes: 20,
+        liked: false),
+    Post(
+        id: '3',
+        name: 'Vito Corleone',
+        username: 'doncorleone',
+        date: 'December 26, 1974',
+        title: 'The Godfather',
+        content: 'I am gonna make you an offer you cant refuse',
+        image: 'assets/vito.jpg',
+        likes: 128,
+        liked: false)
   ];
 
   @override
@@ -25,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Padding(
         padding: EdgeInsets.only(top: 20.0),
         child: Stack(
-         // crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Stack(
               children: <Widget>[
@@ -38,9 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(
-                            'assets/batman.jpg'
-                        ),
+                        image: AssetImage('assets/batman.jpg'),
                       ),
                     ),
                   ),
@@ -50,9 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     'Batman',
                     style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
@@ -109,183 +131,189 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 170.0),
-              child: Scrollbar(
-                isAlwaysShown: true,
-                controller: _scrollController,
-                child: ListView.builder(
+                padding: EdgeInsets.only(top: 170.0),
+                child: Scrollbar(
+                  isAlwaysShown: true,
                   controller: _scrollController,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: posts.length,
-                  itemBuilder: (context, index){
-                    return Container(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: Center(
-                        child: Container(
-                        //height: 200,
-                          width: 380,
-                          color: Colors.white,
-                          child: Stack(
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Container(
-                                      child: IconButton(
-                                          icon: Icon(
-                                              Icons.edit
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Center(
+                          child: Container(
+                            //height: 200,
+                            width: 380,
+                            color: Colors.white,
+                            child: Stack(
+                              children: <Widget>[
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 0.0, 10.0, 10.0),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                            child: IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, "/editProfile");
+                                          },
+                                        )),
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              40.0, 0.0, 10.0, 10.0),
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {},
+                                            color: Colors.red,
                                           ),
-                                        onPressed: () {},
-                                      )
+                                        )
+                                      ],
+                                    )),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              10.0, 45.0, 0.0, 0.0),
+                                          child: Text(
+                                            posts[index].name,
+                                            style: TextStyle(
+                                              color: Colors.lightBlue,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                5.0, 45.0, 0.0, 0.0),
+                                            child: InkWell(
+                                              onTap: () {},
+                                              child: Text(
+                                                '@' + posts[index].username,
+                                                style: TextStyle(
+                                                  color: Colors.lightBlue,
+                                                  fontFamily: 'Montserrat',
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )),
+                                      ],
                                     ),
                                     Container(
-                                      padding: EdgeInsets.fromLTRB(40.0, 0.0, 10.0, 10.0),
-                                      child: IconButton(
-                                        icon: Icon(
-                                            Icons.delete
+                                      alignment: Alignment.topRight,
+                                      padding: EdgeInsets.fromLTRB(
+                                          0.0, 45.0, 10.0, 0.0),
+                                      child: Text(
+                                        posts[index].date,
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                        onPressed: () {},
-                                        color: Colors.red,
                                       ),
-                                    )
+                                    ),
                                   ],
-                                )
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(10.0, 45.0, 0.0, 0.0),
-                                        child: Text(
-                                          posts[index].name,
-                                          style: TextStyle(
-                                            color: Colors.lightBlue,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat',
-                                          ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                      10.0, 48.0, 10.0, 0.0),
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    height: 30,
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                      10.0, 65.0, 10.0, 0.0),
+                                  child: Text(
+                                    posts[index].title,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 100.0, 0.0, 10.0),
+                                    child: Image.asset(
+                                      posts[index].image,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      EdgeInsets.fromLTRB(2.0, 300.0, 0.0, 0.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(
+                                          posts[index].liked
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: posts[index].liked
+                                              ? Colors.red
+                                              : Colors.black,
                                         ),
+                                        onPressed: () {
+                                          setState(() {
+                                            if (!posts[index].liked) {
+                                              posts[index].liked = true;
+                                              posts[index].likes++;
+                                            } else {
+                                              posts[index].liked = false;
+                                              posts[index].likes--;
+                                            }
+                                          });
+                                        },
                                       ),
-                                      Container(
-                                          padding: EdgeInsets.fromLTRB(5.0, 45.0, 0.0, 0.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                            },
-                                            child: Text(
-                                              '@' + posts[index].username,
-                                              style: TextStyle(
-                                                color: Colors.lightBlue,
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          )
+                                      Text(
+                                        posts[index].likes.toString(),
+                                        style: TextStyle(
+                                            color: posts[index].liked
+                                                ? Colors.red
+                                                : Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Montserrat'),
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    alignment: Alignment.topRight,
-                                    padding: EdgeInsets.fromLTRB(0.0, 45.0, 10.0, 0.0),
-                                    child: Text(
-                                      posts[index].date,
-                                      style: TextStyle(
-                                        color: Colors.grey,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                      20.0, 340.0, 10.0, 10.0),
+                                  child: Text(
+                                    posts[index].content,
+                                    style: TextStyle(
+                                        color: Colors.black,
                                         fontFamily: 'Montserrat',
-                                        fontSize: 10.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10.0, 48.0, 10.0, 0.0),
-                                child: Divider(
-                                  color: Colors.grey,
-                                  height: 30,
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(10.0, 65.0, 10.0, 0.0),
-                                child: Text(
-                                  posts[index].title,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 20.0,
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ),
-                              ),
-                              Center(
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 10.0),
-                                  child: Image.asset(
-                                    posts[index].image,
-                                    height: 200,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(2.0, 300.0, 0.0, 0.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(
-                                        posts[index].liked ? Icons.favorite : Icons.favorite_border,
-                                        color: posts[index].liked ? Colors.red : Colors.black,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (!posts[index].liked)
-                                          {
-                                            posts[index].liked = true;
-                                            posts[index].likes++;
-                                          }
-                                          else
-                                          {
-                                            posts[index].liked = false;
-                                            posts[index].likes--;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      posts[index].likes.toString(),
-                                      style: TextStyle(
-                                          color: posts[index].liked ? Colors.red : Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat'
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(20.0, 340.0, 10.0, 10.0),
-                                child: Text(
-                                  posts[index].content,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ),
+                      );
+                    },
+                  ),
+                )),
           ],
         ),
       ),
