@@ -1,16 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:email_validator/email_validator.dart';
 
-class NewPost extends StatefulWidget {
+
+class EditProfile extends StatefulWidget {
   @override
-  _NewPostState createState() => _NewPostState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
-class _NewPostState extends State<NewPost> {
+class _EditProfileState extends State<EditProfile> {
 
   File imageFile;
-  String _title, _content = '';
+  String _username, _email, _password, _name, _bio = "";
 
   _openGallery(BuildContext context) async {
     PickedFile pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
@@ -40,7 +42,7 @@ class _NewPostState extends State<NewPost> {
             children: <Widget>[
               GestureDetector(
                 child: Text(
-                  'Gallery'
+                    'Gallery'
                 ),
                 onTap: () {
                   _openGallery(context);
@@ -57,6 +59,15 @@ class _NewPostState extends State<NewPost> {
                   _openCamera(context);
                 },
               ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+              ),
+              GestureDetector(
+                child: Text(
+                    'Remove'
+                ),
+                onTap: () {},
+              ),
             ],
           ),
         ),
@@ -65,6 +76,8 @@ class _NewPostState extends State<NewPost> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _pass = TextEditingController();
+  final TextEditingController _confirmPass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +92,9 @@ class _NewPostState extends State<NewPost> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(10.0, 25.0, 0.0, 0.0),
+                    padding: EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 0.0),
                     child: Text(
-                      'New Post',
+                      'Edit Profile',
                       style: TextStyle(
                         fontSize: 40.0,
                         fontWeight: FontWeight.bold,
@@ -90,14 +103,14 @@ class _NewPostState extends State<NewPost> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(212.0, 20.0, 0.0, 0.0),
+                    padding: EdgeInsets.fromLTRB(245.0, 20.0, 0.0, 0.0),
                     child: Text(
                       '.',
                       style: TextStyle(
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                        color: Colors.lightBlue
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat',
+                          color: Colors.lightBlue
                       ),
                     ),
                   ),
@@ -108,33 +121,49 @@ class _NewPostState extends State<NewPost> {
               padding: EdgeInsets.only(top: 45.0, left: 20.0, right: 20.0),
               child: Column(
                 children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                        labelText: 'TITLE',
-                        labelStyle: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                  Stack(
+                    children: <Widget> [
+                      GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 0.0),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(
+                                    'assets/batman.jpg'
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.lightBlue
-                            )
-                        )
-                    ),
-                    validator: (title) {
-                      if (title.isEmpty)
-                        return 'Title cant be empty';
-                      else
-                        return null;
-                    },
-                    onSaved: (title)=> _title = title,
+                        onTap: () {
+                          _showChoiceDialog(context);
+                        },
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(96.0, 95.0, 0.0, 0.0),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.photo_camera_rounded,
+                            color: Colors.grey[500],
+                          ),
+                          onPressed: () {
+                            _showChoiceDialog(context);
+                          },
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(
-                    height: 20.0,
+                    height: 10.0,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'CONTENT',
+                        labelText: 'FULL NAME',
                         labelStyle: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
@@ -144,41 +173,58 @@ class _NewPostState extends State<NewPost> {
                             borderSide: BorderSide(color: Colors.lightBlue)
                         )
                     ),
-                    validator: (content) {
-                      if (content.isEmpty)
-                        return 'Content cant be empty';
+                    validator: (name){
+                      Pattern pattern =
+                          r"^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)";
+                      RegExp regex = new RegExp(pattern);
+                      if (!regex.hasMatch(name))
+                        return 'Invalid name';
                       else
                         return null;
                     },
-                    onSaved: (content)=> _content = content,
+                    onSaved: (name)=> _name = name,
                   ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _showChoiceDialog(context);
-                    },
-                    child: Container(
-                      width: 160.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        border: Border.all(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Select Image',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat',
-                          ),
+                  SizedBox(height: 20.0,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: 'USERNAME',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
                         ),
-                      ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.lightBlue)
+                        )
                     ),
+                    validator: (name){
+                      Pattern pattern =
+                          r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                      RegExp regex = new RegExp(pattern);
+                      if (!regex.hasMatch(name))
+                        return 'Invalid username';
+                      else
+                        return null;
+                    },
+                    onSaved: (name)=> _username = name,
+                  ),
+                  SizedBox(height: 20.0,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: 'BIO',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.lightBlue)
+                        )
+                    ),
+                    validator: (name){
+                      return null;
+                    },
+                    onSaved: (bio)=> _bio = bio,
                   ),
                   SizedBox(
                     height: 40.0,
@@ -187,18 +233,7 @@ class _NewPostState extends State<NewPost> {
                     onTap: () {
                       if(_formKey.currentState.validate()){
                         _formKey.currentState.save();
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                            'Post Uploaded!',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                              ),
-                            ),
-                            backgroundColor: Colors.lightBlue,
-                          )
-                        );
+                        Navigator.pop(context);
                       }
                     },
                     child: Container(
@@ -211,11 +246,11 @@ class _NewPostState extends State<NewPost> {
                       ),
                       child: Center(
                         child: Text(
-                          'UPLOAD',
+                          'SAVE',
                           style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat',
                           ),
                         ),
