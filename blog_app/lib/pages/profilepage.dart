@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_app/pages/postdetails.dart';
+import 'package:blog_app/models/postdetails.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
