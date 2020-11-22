@@ -53,11 +53,8 @@ class _EzTransitionState extends State<EzTransition> {
       print("Pushed login!!");
     } else {
       print("Pushing Home!!");
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ));
+      Navigator.of(context).pushReplacementNamed('/navigationbar');
+
       print("Pushed home!!"); 
     }
   }

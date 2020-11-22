@@ -233,9 +233,8 @@ class _LoginState extends State<Login> {
     if (result) {
       await updatedLogedUserDetails();
       User user = FirebaseAuth.instance.currentUser;
-      authNotifier.setUser(user); 
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => HomePage()));
+      authNotifier.setUser(user);
+      Navigator.of(context).pushReplacementNamed('/navigationbar');
     } else {
       var snackBar = new SnackBar(
           content: new Text("An Error Occured!!, Try again Later!!!"),
