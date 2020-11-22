@@ -40,7 +40,7 @@ class _EzTransitionState extends State<EzTransition> {
     // var user = FirebaseAuth.instance.currentUser;
     // bool result = user == null ? false : true;
 
-    await new Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
 
     print("Auth User : ${authNotifier.user}");
     if (authNotifier.user == null) {

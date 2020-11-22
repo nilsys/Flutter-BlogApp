@@ -1,5 +1,7 @@
+import 'package:blog_app/api/post_api.dart';
 import 'package:flutter/material.dart';
-import 'package:blog_app/pages/postdetails.dart';
+import 'package:blog_app/models/postdetails.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,21 +9,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final ScrollController _scrollController = ScrollController();
 
   List<Post> posts = [
-    Post(id: '1', name: 'Anaikin Skywalker', username: 'thechosenone',  date: 'April 22, 2019', title: 'Star Wars', content: 'May the force be with you', image: 'assets/anaikin.jpg', likes: 32, liked: true),
-    Post(id: '2', name: 'Bruce Wayne', username: 'therichguy',  date: 'January 12, 2020', title: 'The Dark Knight', content: 'I am Batman', image: 'assets/batman.jpg', likes: 20, liked: false),
-    Post(id: '3', name: 'Vito Corleone', username: 'doncorleone',  date: 'December 26, 1974', title: 'The Godfather', content: 'I am gonna make you an offer you cant refuse', image: 'assets/vito.jpg', likes: 128, liked: false)
+    Post(
+        id: '1',
+        name: 'Anaikin Skywalker',
+        username: 'thechosenone',
+        date: 'April 22, 2019',
+        title: 'Star Wars',
+        content: 'May the force be with you',
+        image: 'assets/anaikin.jpg',
+        likes: 32,
+        liked: true),
+    Post(
+        id: '2',
+        name: 'Bruce Wayne',
+        username: 'therichguy',
+        date: 'January 12, 2020',
+        title: 'The Dark Knight',
+        content: 'I am Batman',
+        image: 'assets/batman.jpg',
+        likes: 20,
+        liked: false),
+    Post(
+        id: '3',
+        name: 'Vito Corleone',
+        username: 'doncorleone',
+        date: 'December 26, 1974',
+        title: 'The Godfather',
+        content: 'I am gonna make you an offer you cant refuse',
+        image: 'assets/vito.jpg',
+        likes: 128,
+        liked: false)
   ];
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]) ; 
     return Scaffold(
+      // appBar: AppBar(),
       backgroundColor: Colors.grey[200],
       body: Stack(
-        children: <Widget> [
+        children: <Widget>[
           Stack(
             children: <Widget>[
               Container(
@@ -33,9 +63,7 @@ class _HomePageState extends State<HomePage> {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage(
-                          'assets/batman.jpg'
-                      ),
+                      image: AssetImage('assets/batman.jpg'),
                     ),
                   ),
                 ),
@@ -45,13 +73,11 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   'Batman',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold
-                  ),
+                      fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(70.0, 30.0, 0.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(70.0, 30.0, 0.0, 0.0),
                   child: InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, '/profilepage');
@@ -63,8 +89,7 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )
-              )
+                  ))
             ],
           ),
           Container(
@@ -77,23 +102,25 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: posts.length,
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return Container(
                       padding: EdgeInsets.only(bottom: 20),
                       child: Center(
                         child: Container(
-                          //height: 200,
+                            //height: 200,
                             width: 380,
                             color: Colors.white,
                             child: Stack(
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Row(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.fromLTRB(10.0, 5.0, 0.0, 0.0),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10.0, 5.0, 0.0, 0.0),
                                           child: Text(
                                             posts[index].name,
                                             style: TextStyle(
@@ -104,10 +131,10 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Container(
-                                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 0.0, 0.0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                5.0, 5.0, 0.0, 0.0),
                                             child: InkWell(
-                                              onTap: () {
-                                              },
+                                              onTap: () {},
                                               child: Text(
                                                 '@' + posts[index].username,
                                                 style: TextStyle(
@@ -116,13 +143,13 @@ class _HomePageState extends State<HomePage> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                            )
-                                        ),
+                                            )),
                                       ],
                                     ),
                                     Container(
                                       alignment: Alignment.topRight,
-                                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 0.0),
+                                      padding: EdgeInsets.fromLTRB(
+                                          0.0, 5.0, 10.0, 0.0),
                                       child: Text(
                                         posts[index].date,
                                         style: TextStyle(
@@ -136,14 +163,16 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 0.0),
+                                  padding:
+                                      EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 0.0),
                                   child: Divider(
                                     color: Colors.grey,
                                     height: 30,
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 0.0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      10.0, 25.0, 10.0, 0.0),
                                   child: Text(
                                     posts[index].title,
                                     style: TextStyle(
@@ -156,7 +185,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Center(
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 10.0),
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 60.0, 0.0, 10.0),
                                     child: Image.asset(
                                       posts[index].image,
                                       height: 200,
@@ -165,61 +195,68 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(2.0, 260.0, 0.0, 0.0),
+                                  padding:
+                                      EdgeInsets.fromLTRB(2.0, 260.0, 0.0, 0.0),
                                   child: Row(
                                     children: <Widget>[
                                       IconButton(
                                         icon: Icon(
-                                          posts[index].liked ? Icons.favorite : Icons.favorite_border,
-                                          color: posts[index].liked ? Colors.red : Colors.black,
+                                          posts[index].liked
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: posts[index].liked
+                                              ? Colors.red
+                                              : Colors.black,
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            if (!posts[index].liked)
-                                            {
+                                        onPressed: () async {
+                                          if (!posts[index].liked) {
+                                            setState(() {
                                               posts[index].liked = true;
                                               posts[index].likes++;
-                                            }
-                                            else
-                                            {
+                                            });
+                                            await likePost(
+                                                posts[index].id, "id");
+                                          } else {
+                                            setState(() {
                                               posts[index].liked = false;
                                               posts[index].likes--;
-                                            }
-                                          });
+                                            });
+                                            await likePost(
+                                                posts[index].id, "id");
+                                          }
                                         },
                                       ),
                                       Text(
                                         posts[index].likes.toString(),
                                         style: TextStyle(
-                                            color: posts[index].liked ? Colors.red : Colors.black,
+                                            color: posts[index].liked
+                                                ? Colors.red
+                                                : Colors.black,
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'
-                                        ),
+                                            fontFamily: 'Montserrat'),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(20.0, 300.0, 10.0, 10.0),
+                                  padding: EdgeInsets.fromLTRB(
+                                      20.0, 300.0, 10.0, 10.0),
                                   child: Text(
                                     posts[index].content,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Montserrat',
                                         fontSize: 13.0,
-                                        fontWeight: FontWeight.w500
-                                    ),
+                                        fontWeight: FontWeight.w500),
                                   ),
                                 ),
                               ],
-                            )
-                        ),
+                            )),
                       ),
                     );
                   },
                 ),
-              )
-          ),
+              )),
         ],
       ),
     );
