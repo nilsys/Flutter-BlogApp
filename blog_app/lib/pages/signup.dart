@@ -8,7 +8,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUp extends State<SignUp> {
 
-  String _username, _email, _password = "";
+  String _name, _email, _password = "";
 
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
@@ -74,7 +74,7 @@ class _SignUp extends State<SignUp> {
                   SizedBox(height: 20.0,),
                   TextFormField(
                     decoration: InputDecoration(
-                        labelText: 'NAME',
+                        labelText: 'FULL NAME',
                         labelStyle: TextStyle(
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
@@ -86,14 +86,14 @@ class _SignUp extends State<SignUp> {
                     ),
                     validator: (name){
                       Pattern pattern =
-                          r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                          r"^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)";
                       RegExp regex = new RegExp(pattern);
                       if (!regex.hasMatch(name))
-                        return 'Invalid username';
+                        return 'Invalid name';
                       else
                         return null;
                     },
-                    onSaved: (name)=> _username = name,
+                    onSaved: (name)=> _name = name,
                   ),
                   SizedBox(height: 20.0,),
                   TextFormField(
@@ -164,7 +164,8 @@ class _SignUp extends State<SignUp> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat'),
+                                fontFamily: 'Montserrat'
+                            ),
                           ),
                         ),
                       ),

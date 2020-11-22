@@ -1,8 +1,11 @@
 import 'package:blog_app/api/auth_api.dart';
-import 'package:blog_app/pages/home.dart';
+import 'package:blog_app/notifier/auth_notifier.dart';
+import 'package:blog_app/pages/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,7 +14,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String _email, _password = "";
-
+  AuthNotifier authNotifier;
   @override
   void initState() {
     super.initState();
@@ -25,6 +28,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context);
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Form(
@@ -227,8 +231,10 @@ class _LoginState extends State<Login> {
   void _sigInGoogle() async {
     var result = await signInWithGoogle();
     if (result) {
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => HomePage()));
+      await updatedLogedUserDetails();
+      User user = FirebaseAuth.instance.currentUser;
+      authNotifier.setUser(user);
+      Navigator.of(context).pushReplacementNamed('/navigationbar');
     } else {
       var snackBar = new SnackBar(
           content: new Text("An Error Occured!!, Try again Later!!!"),
