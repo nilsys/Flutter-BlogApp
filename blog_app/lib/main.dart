@@ -1,4 +1,5 @@
 import 'package:blog_app/notifier/auth_notifier.dart';
+import 'package:blog_app/pages/editprofile.dart';
 import 'package:blog_app/pages/homepage.dart';
 import 'package:blog_app/pages/splash.dart';
 import 'package:blog_app/service/auth.dart';
@@ -40,6 +41,7 @@ class MainApp extends StatelessWidget {
         '/firstpage': (context) => FirstPage(),
         '/navigationbar': (context) => NavigationBar(),
         '/profilepage': (context) => ProfilePage(),
+        '/editprofile': (context) => EditProfile() 
       },
     );
   }

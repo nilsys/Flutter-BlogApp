@@ -6,6 +6,8 @@ const String img = "img_url";
 const String userName = "userName";
 const String timestamp = "timestamp";
 
+const String bio = "bio"; 
+
 //Post
 
 const String content = "content";
@@ -13,4 +15,4 @@ const String title = "title";
 const String likes = "likes";
 const String id = "id";
 
-const String posts = "posts"; 
+const String posts = "posts";

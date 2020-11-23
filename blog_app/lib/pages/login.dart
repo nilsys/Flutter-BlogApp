@@ -234,6 +234,7 @@ class _LoginState extends State<Login> {
       await updatedLogedUserDetails();
       User user = FirebaseAuth.instance.currentUser;
       authNotifier.setUser(user);
+      initializeAuthNotifier(authNotifier);
       Navigator.of(context).pushReplacementNamed('/navigationbar');
     } else {
       var snackBar = new SnackBar(

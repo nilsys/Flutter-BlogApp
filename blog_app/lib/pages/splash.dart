@@ -36,14 +36,15 @@ class _EzTransitionState extends State<EzTransition> {
 
   void toProcess() async {
     await getData();
+    User user = FirebaseAuth.instance.currentUser;
+
     // Firebase.initializeApp();
     // var user = FirebaseAuth.instance.currentUser;
     // bool result = user == null ? false : true;
-
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
 
     print("Auth User : ${authNotifier.user}");
-    if (authNotifier.user == null) {
+    if (user == null) {
       print("Pushing Login!!");
       Navigator.pushReplacement(
           context,
@@ -55,7 +56,7 @@ class _EzTransitionState extends State<EzTransition> {
       print("Pushing Home!!");
       Navigator.of(context).pushReplacementNamed('/navigationbar');
 
-      print("Pushed home!!"); 
+      print("Pushed home!!");
     }
   }
 
@@ -82,7 +83,7 @@ class _EzTransitionState extends State<EzTransition> {
     await Firebase.initializeApp();
     User user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
-
-    initializeAuthNotifier(authNotifier);
+    
+    await initializeAuthNotifier(authNotifier);
   }
 }
