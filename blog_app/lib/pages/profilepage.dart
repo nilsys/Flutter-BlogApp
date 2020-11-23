@@ -1,7 +1,10 @@
+import 'package:blog_app/models/blog_user.dart';
+import 'package:blog_app/notifier/auth_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/postdetails.dart';
 import 'package:blog_app/pages/editprofile.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -10,7 +13,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ScrollController _scrollController = ScrollController();
-
+  AuthNotifier authnotifer;
+  BlogUser user; 
   List<Post> posts = [
     Post(
         id: '1',
@@ -43,9 +47,12 @@ class _ProfilePageState extends State<ProfilePage> {
         likes: 128,
         liked: false)
   ];
+  
 
   @override
   Widget build(BuildContext context) {
+    authnotifer = Provider.of<AuthNotifier>(context);
+    user = authnotifer.blogUser;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: Padding(
@@ -64,7 +71,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage('assets/batman.jpg'),
+                        image: (user == null || user.picUrl == null)
+                            ? NetworkImage(
+                                "https://swiftfs.com.au/wp-content/uploads/2017/11/blank.jpg")
+                            : NetworkImage(user.picUrl),
                       ),
                     ),
                   ),
@@ -72,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 15.0, 0.0, 0.0),
                   child: Text(
-                    'Batman',
+                    user.name ,
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
                   ),
@@ -80,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 30.0, 0.0, 0.0),
                   child: Text(
-                    '@' + 'therichguy',
+                    '@' + user.userName, 
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w500,
@@ -103,8 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               padding: EdgeInsets.fromLTRB(15.0, 60.0, 0.0, 0.0),
-              child: Text(
-                'Residence in Gotham\nCEO of Wayne Enterprises\nSon of Alfred the Butler',
+              child: Text(user.bio,                
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w500,

@@ -33,6 +33,8 @@ class Post {
     image = map[constants.img];
 
     likes = map[constants.likes];
+    date = map[constants.timestamp].toString();
+    liked = false; 
   }
 
   Map<String, dynamic> toMap() {
@@ -43,8 +45,8 @@ class Post {
       constants.title: title,
       constants.content: content,
       constants.img: image,
-      constants.likes: likes , 
-      constants.timestamp : FieldValue.serverTimestamp() 
+      constants.likes: likes,
+      constants.timestamp: FieldValue.serverTimestamp()
     };
   }
 }
