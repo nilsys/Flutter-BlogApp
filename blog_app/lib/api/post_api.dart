@@ -58,7 +58,7 @@ Future<void> unLikePost(String postId, String uid) async {
   });
 }
 
-Future<bool> uploadPost(String _title, String _content, File imageFile) async {
+Future<bool> uploadPost(String _title, String _content, File imageFile , BlogUser user) async {
   CollectionReference ref =
       FirebaseFirestore.instance.collection(constants.posts);
 
@@ -66,7 +66,6 @@ Future<bool> uploadPost(String _title, String _content, File imageFile) async {
 
   String url = await uploadImage(imageFile, doc.id);
   if (url == null) return false;
-
   Post post = Post(
       content: _content,
       id: doc.id,
@@ -74,8 +73,9 @@ Future<bool> uploadPost(String _title, String _content, File imageFile) async {
       image: url,
       title: _title,
       date: null,
-      name: "name",
-      username: "user",
+      name: user.name,
+      username: user.userName,
+      userId : user.uid,
       likes: 0);
   FirebaseFirestore.instance.runTransaction((transaction) async {
     transaction.set(doc, post.toMap());

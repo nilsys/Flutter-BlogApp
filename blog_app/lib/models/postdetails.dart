@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/util/constants.dart' as constants;
+import 'package:timeago/timeago.dart' as timeago;
 
 class Post {
   String id;
@@ -12,6 +13,7 @@ class Post {
   String image;
   int likes;
   bool liked;
+  String userId;
   Post(
       {this.id,
       this.name,
@@ -21,6 +23,7 @@ class Post {
       this.content,
       this.image,
       this.likes,
+      this.userId,
       this.liked});
 
   Post.fromMap(Map<String, dynamic> map) {
@@ -33,12 +36,19 @@ class Post {
     image = map[constants.img];
 
     likes = map[constants.likes];
-    date = map[constants.timestamp].toString();
-    liked = false; 
+    date = _ago(map[constants.timestamp]);
+    liked = false;
+    userId = map[constants.uid]; 
+
+  }
+
+  _ago(Timestamp t) {
+    return timeago.format(t.toDate());
   }
 
   Map<String, dynamic> toMap() {
     return {
+      constants.uid :userId,
       constants.name: name,
       constants.id: id,
       constants.userName: username,

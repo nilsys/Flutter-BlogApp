@@ -1,10 +1,12 @@
 import 'package:blog_app/models/blog_user.dart';
 import 'package:blog_app/notifier/auth_notifier.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blog_app/models/postdetails.dart';
 import 'package:blog_app/pages/editprofile.dart';
 import 'package:provider/provider.dart';
+import 'package:blog_app/util/constants.dart' as constants;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -14,40 +16,27 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final ScrollController _scrollController = ScrollController();
   AuthNotifier authnotifer;
-  BlogUser user; 
-  List<Post> posts = [
-    Post(
-        id: '1',
-        name: 'Anaikin Skywalker',
-        username: 'thechosenone',
-        date: 'April 22, 2019',
-        title: 'Star Wars',
-        content: 'May the force be with you',
-        image: 'assets/anaikin.jpg',
-        likes: 32,
-        liked: true),
-    Post(
-        id: '2',
-        name: 'Bruce Wayne',
-        username: 'therichguy',
-        date: 'January 12, 2020',
-        title: 'The Dark Knight',
-        content: 'I am Batman',
-        image: 'assets/batman.jpg',
-        likes: 20,
-        liked: false),
-    Post(
-        id: '3',
-        name: 'Vito Corleone',
-        username: 'doncorleone',
-        date: 'December 26, 1974',
-        title: 'The Godfather',
-        content: 'I am gonna make you an offer you cant refuse',
-        image: 'assets/vito.jpg',
-        likes: 128,
-        liked: false)
-  ];
-  
+  BlogUser user;
+  List<Post> posts = List<Post>() ; 
+  @override
+  void initState()  {
+    super.initState();
+    getList();
+  }
+
+  Future<void> getList() async {
+    var col = FirebaseFirestore.instance.collection(constants.posts).where(constants.uid, isEqualTo: user.uid);
+    var snaps = await col.get();
+    var list = snaps.docs.toList();
+    List<Post> tempList = List();
+    for (var item in list) {
+      tempList.add(Post.fromMap(item.data()));
+    }
+    setState(() {
+      posts.clear();
+      posts.addAll(tempList); 
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 15.0, 0.0, 0.0),
                   child: Text(
-                    user.name ,
+                    user.name,
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
                   ),
@@ -90,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 30.0, 0.0, 0.0),
                   child: Text(
-                    '@' + user.userName, 
+                    '@' + user.userName,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w500,
@@ -113,7 +102,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               padding: EdgeInsets.fromLTRB(15.0, 60.0, 0.0, 0.0),
-              child: Text(user.bio,                
+              child: Text(
+                user.bio,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w500,
@@ -258,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Container(
                                     padding: EdgeInsets.fromLTRB(
                                         0.0, 100.0, 0.0, 10.0),
-                                    child: Image.asset(
+                                    child: Image.network(
                                       posts[index].image,
                                       height: 200,
                                       fit: BoxFit.cover,

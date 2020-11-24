@@ -168,17 +168,18 @@ class _BlogWidgetState extends State<BlogWidget> {
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(20.0, 300.0, 10.0, 10.0),
-                      child: Text(
-                        widget.post.content,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Montserrat',
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
+                    // Container(
+                    //   color: Colors.black,
+                    //   padding: EdgeInsets.fromLTRB(20.0, 300.0, 10.0, 10.0),
+                    //   child: Text(
+                    //     widget.post.content,
+                    //     style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontFamily: 'Montserrat',
+                    //         fontSize: 13.0,
+                    //         fontWeight: FontWeight.w500),
+                    //   ),
+                    // ),
                   ],
                 )),
           ),
