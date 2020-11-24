@@ -1,5 +1,6 @@
 import 'package:blog_app/notifier/auth_notifier.dart';
 import 'package:blog_app/pages/editprofile.dart';
+import 'package:blog_app/pages/forgotpassword.dart';
 import 'package:blog_app/pages/homepage.dart';
 import 'package:blog_app/pages/splash.dart';
 import 'package:blog_app/service/auth.dart';
@@ -11,6 +12,7 @@ import 'package:blog_app/pages/login.dart';
 import 'package:blog_app/pages/firstpage.dart';
 import 'package:blog_app/pages/navigationbar.dart';
 import 'package:blog_app/pages/profilepage.dart';
+import 'package:blog_app/pages/forgotpassword.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -29,7 +31,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // initialRoute: '/navigationbar',
-      initialRoute: "/splash",
+      initialRoute: "/forgotpassword",
       // home: HomePage(),
 
       routes: {
@@ -41,7 +43,8 @@ class MainApp extends StatelessWidget {
         '/firstpage': (context) => FirstPage(),
         '/navigationbar': (context) => NavigationBar(),
         '/profilepage': (context) => ProfilePage(),
-        '/editprofile': (context) => EditProfile() 
+        '/editprofile': (context) => EditProfile(),
+        '/forgotpassword': (context) => ForgotPassword(),
       },
     );
   }
