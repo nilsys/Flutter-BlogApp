@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:blog_app/api/post_api.dart';
+import 'package:blog_app/notifier/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class NewPost extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class _NewPostState extends State<NewPost> {
   File imageFile;
   String _title, _content = '';
   bool _active = true;
+  AuthNotifier authNotifier;
   _openGallery(BuildContext context) async {
     PickedFile pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
@@ -69,6 +72,7 @@ class _NewPostState extends State<NewPost> {
 
   @override
   Widget build(BuildContext context) {
+    authNotifier = Provider.of<AuthNotifier>(context);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Form(
@@ -187,12 +191,12 @@ class _NewPostState extends State<NewPost> {
                         }
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-                          bool result =
-                              await uploadPost(_title, _content, imageFile);
+                          bool result = await uploadPost(
+                              _title, _content, imageFile, authNotifier.blogUser);
                           if (result) {
                             showSnackBar("Post Uploaded!!");
                             setState(() {
-                              _active = false ;
+                              _active = false;
                             });
                           } else {
                             showSnackBar("An Error Occured!!");

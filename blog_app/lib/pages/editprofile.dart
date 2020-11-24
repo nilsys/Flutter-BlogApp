@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:blog_app/api/post_api.dart';
 import 'package:blog_app/models/blog_user.dart';
 import 'package:blog_app/notifier/auth_notifier.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   File imageFile;
   BlogUser user;
+  String imagePath;
   AuthNotifier authnotifier;
   String _username, _email, _password, _name, _bio = "";
 
@@ -23,6 +25,7 @@ class _EditProfileState extends State<EditProfile> {
     var picture = File(pickedFile.path);
     this.setState(() {
       imageFile = picture;
+      imagePath = picture.path;
     });
     Navigator.of(context).pop();
   }
@@ -33,6 +36,7 @@ class _EditProfileState extends State<EditProfile> {
     var picture = File(pickedFile.path);
     this.setState(() {
       imageFile = picture;
+      imagePath = picture.path;
     });
     Navigator.of(context).pop();
   }
@@ -85,7 +89,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     authnotifier = Provider.of<AuthNotifier>(context);
     user = authnotifier.blogUser;
-    print("user : ${user.toMap()}"); 
+    print("user : ${user.toMap()}");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Form(
@@ -136,12 +140,11 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(user == null ||
-                                        user.picUrl == null
-                                    ? "https://spoilerguy.com/wp-content/uploads/2020/10/Solo-Leveling-chapter-125-read.jpg"
-                                    : user.picUrl),
-                              ),
+                                  fit: BoxFit.fill,
+                                  image: (user == null || user.picUrl == null)
+                                      ?  NetworkImage("https://swiftfs.com.au/wp-content/uploads/2017/11/blank.jpg") :
+                                   NetworkImage(user.picUrl) ,
+                                  ),
                             ),
                           ),
                         ),
@@ -200,10 +203,11 @@ class _EditProfileState extends State<EditProfile> {
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
                         ),
-
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.lightBlue))),
-                    initialValue: user == null || user.userName == null ? "" : user.userName,
+                    initialValue: user == null || user.userName == null
+                        ? ""
+                        : user.userName,
                     validator: (name) {
                       Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
                       RegExp regex = new RegExp(pattern);
@@ -227,6 +231,8 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.lightBlue))),
+                    initialValue:
+                        user == null || user.bio == null ? "" : user.bio,
                     validator: (name) {
                       return null;
                     },
@@ -236,10 +242,10 @@ class _EditProfileState extends State<EditProfile> {
                     height: 40.0,
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        Navigator.pop(context);
+                        await updateUserProfile();
                       }
                     },
                     child: Container(
@@ -263,7 +269,7 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                   ),
-                  Text(imageFile.toString()),
+                  // Text(imageFile.toString()),
                 ],
               ),
             ),
@@ -273,10 +279,20 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  void updateUserProfile() async {
+  updateUserProfile() async {
     user.name = _name;
     user.userName = _username;
     user.picUrl = imageFile.path;
-    // updateProfile(user);
+    user.bio = _bio;
+    // user.picUrl = imagePath == null ? user.picUrl : imagePath ;
+    bool result;
+    if (imagePath == null)
+      result = await uploadProfile(user);
+    else
+      result = await uploadProfileWithImage(user, imagePath);
+
+    if (result) {
+      Navigator.pop(context);
+    }
   }
 }
