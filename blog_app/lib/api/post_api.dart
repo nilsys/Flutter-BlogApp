@@ -68,7 +68,7 @@ Future<bool> uploadPost(String _title, String _content, File imageFile , BlogUse
   if (url == null) return false;
   Post post = Post(
       content: _content,
-      id: doc.id,
+      id: doc.id, 
       liked: false,
       image: url,
       title: _title,
