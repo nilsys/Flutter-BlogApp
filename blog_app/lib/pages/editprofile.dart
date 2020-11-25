@@ -140,11 +140,12 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: (user == null || user.picUrl == null)
-                                      ?  NetworkImage("https://swiftfs.com.au/wp-content/uploads/2017/11/blank.jpg") :
-                                   NetworkImage(user.picUrl) ,
-                                  ),
+                                fit: BoxFit.fill,
+                                image: (user == null || user.picUrl == null)
+                                    ? NetworkImage(
+                                        "https://swiftfs.com.au/wp-content/uploads/2017/11/blank.jpg")
+                                    : NetworkImage(user.picUrl),
+                              ),
                             ),
                           ),
                         ),
@@ -282,15 +283,15 @@ class _EditProfileState extends State<EditProfile> {
   updateUserProfile() async {
     user.name = _name;
     user.userName = _username;
-    user.picUrl = imageFile.path;
     user.bio = _bio;
     // user.picUrl = imagePath == null ? user.picUrl : imagePath ;
     bool result;
     if (imagePath == null)
       result = await uploadProfile(user);
-    else
+    else {
+      user.picUrl = imageFile.path;
       result = await uploadProfileWithImage(user, imagePath);
-
+    }
     if (result) {
       Navigator.pop(context);
     }
