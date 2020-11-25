@@ -86,7 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         },
                         child: Center(
                           child: Text(
-                            'SIGNUP',
+                            'Reset Password !',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

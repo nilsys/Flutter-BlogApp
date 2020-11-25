@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // initialRoute: '/navigationbar',
-      initialRoute: "/forgotpassword",
+      initialRoute: "/splash",
       // home: HomePage(),
 
       routes: {

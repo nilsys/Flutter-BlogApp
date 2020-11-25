@@ -9,42 +9,41 @@ import 'package:blog_app/pages/editprofile.dart';
 import 'package:provider/provider.dart';
 import 'package:blog_app/util/constants.dart' as constants;
 
-class ProfilePage extends StatefulWidget {
-  String uId = "";
-  // ProfilePage([this.uId = ""]);
-  ProfilePage();
-  ProfilePage.fromId(String id) {
-    ProfilePage();
-    this.uId = id;
-  }
+class UserProfile extends StatefulWidget {
+  String id, name, userName;
+  UserProfile({this.id, this.name, this.userName});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _UserProfileState createState() => _UserProfileState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _UserProfileState extends State<UserProfile> {
   bool delete = true;
   final ScrollController _scrollController = ScrollController();
-  AuthNotifier authnotifer;
-  BlogUser user;
   List<Post> posts = List<Post>();
-
+  BlogUser bUser;
   @override
   void initState() {
     super.initState();
+    getUser();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getList();
-      print("uid:  ${widget.uId} ");
-      if (widget.uId.isNotEmpty) {
-        delete = false;
-      }
+    });
+  }
+
+  Future<void> getUser() async {
+    var doc =
+        FirebaseFirestore.instance.collection(constants.users).doc(widget.id);
+    var snap = await doc.get();
+    setState(() {
+      bUser = BlogUser.fromMap(snap.data());
     });
   }
 
   Future<void> getList() async {
-    var col = FirebaseFirestore.instance.collection(constants.posts).where(
-        constants.uid,
-        isEqualTo: widget.uId.isEmpty ? user.uid : widget.uId);
+    var col = FirebaseFirestore.instance
+        .collection(constants.posts)
+        .where(constants.uid, isEqualTo: widget.id);
     var snaps = await col.get();
     var list = snaps.docs.toList();
     List<Post> tempList = List();
@@ -59,8 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    authnotifer = Provider.of<AuthNotifier>(context);
-    user = authnotifer.blogUser;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: Padding(
@@ -79,10 +76,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: (user == null || user.picUrl == null)
+                        image: (bUser == null || bUser.picUrl == null)
                             ? NetworkImage(
                                 "https://swiftfs.com.au/wp-content/uploads/2017/11/blank.jpg")
-                            : NetworkImage(user.picUrl),
+                            : NetworkImage(bUser.picUrl),
                       ),
                     ),
                   ),
@@ -90,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 15.0, 0.0, 0.0),
                   child: Text(
-                    user.name,
+                    widget.name,
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
                   ),
@@ -98,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(70.0, 30.0, 0.0, 0.0),
                   child: Text(
-                    '@' + user.userName,
+                    '@' + widget.userName,
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w500,
@@ -122,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               padding: EdgeInsets.fromLTRB(15.0, 60.0, 0.0, 0.0),
               child: Text(
-                user.bio,
+                bUser != null ? bUser.bio :"" ,
                 style: TextStyle(
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w500,
@@ -168,35 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.white,
                             child: Stack(
                               children: <Widget>[
-                                Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 10.0, 10.0),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Container(
-                                            child: IconButton(
-                                          icon: Icon(Icons.edit),
-                                          onPressed: () {
-                                            Navigator.pushNamed(
-                                                context, "/editProfile");
-                                          },
-                                        )),
-                                        delete == true
-                                            ? Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    40.0, 0.0, 10.0, 10.0),
-                                                child: IconButton(
-                                                  icon: Icon(Icons.delete),
-                                                  onPressed: () async {
-                                                    deletePost(
-                                                        posts[index].id, index);
-                                                  },
-                                                  color: Colors.red,
-                                                ),
-                                              )
-                                            : SizedBox()
-                                      ],
-                                    )),
+                                
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,

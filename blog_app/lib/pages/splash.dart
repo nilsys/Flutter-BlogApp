@@ -1,6 +1,7 @@
 import 'package:blog_app/api/auth_api.dart';
 import 'package:blog_app/models/blog_user.dart';
 import 'package:blog_app/notifier/auth_notifier.dart';
+import 'package:blog_app/pages/firstpage.dart';
 import 'package:blog_app/pages/homepage.dart';
 import 'package:blog_app/pages/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -49,7 +50,7 @@ class _EzTransitionState extends State<EzTransition> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Login(),
+            builder: (context) => FirstPage()
           ));
       print("Pushed login!!");
     } else {

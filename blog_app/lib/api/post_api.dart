@@ -58,7 +58,8 @@ Future<void> unLikePost(String postId, String uid) async {
   });
 }
 
-Future<bool> uploadPost(String _title, String _content, File imageFile , BlogUser user) async {
+Future<bool> uploadPost(
+    String _title, String _content, File imageFile, BlogUser user) async {
   CollectionReference ref =
       FirebaseFirestore.instance.collection(constants.posts);
 
@@ -75,7 +76,7 @@ Future<bool> uploadPost(String _title, String _content, File imageFile , BlogUse
       date: null,
       name: user.name,
       username: user.userName,
-      userId : user.uid,
+      userId: user.uid,
       likes: 0);
   FirebaseFirestore.instance.runTransaction((transaction) async {
     transaction.set(doc, post.toMap());
@@ -150,4 +151,16 @@ Future<bool> get_like(String uid) async {
     return false; // no like under this user present
   else
     return true;
+}
+
+Future<void> deletePostById(String id) async {
+  DocumentReference doc =
+      FirebaseFirestore.instance.collection(constants.posts).doc(id);
+
+  try {
+    await FirebaseFirestore.instance
+        .runTransaction((transaction) async => transaction.delete(doc));
+  } catch (err) {
+    print("Delte post Erro : $err");
+  }
 }
